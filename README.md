@@ -32,6 +32,34 @@ Install dependencies:
 
 ```bash
 pip install -r requirements.txt
+
+#  Environmental Impact Analyzer  
+
+A full-stack web application that evaluates and informs users about the **environmental impact of consumer products**.  
+Built with **Flask (backend)** + **React (frontend)**, and designed to evolve into an AI-powered sustainability tool.  
+
+---
+
+##  Progress Timeline  
+
+###  Week 1 · Day 5  
+- **Backend:** Expanded dummy scoring logic for products.  
+- **Frontend:** Added loading state, error handling, and color-coded scores.  
+- **Integration:** Product name flows from React → Flask → displayed with score.  
+
+---
+
+## 🛠️ Tech Stack  
+- **Frontend:** React, Fetch API  
+- **Backend:** Flask, Flask-CORS  
+- **Database (future):** PostgreSQL / MongoDB  
+- **AI (future):** Hugging Face Transformers, PyTorch  
+
+---
+
+## 👩‍💻 Author  
+Developed by *Tavishi Maini* as part of a full-stack + AI learning project.  
+
 ```
 
 ## Contributing
