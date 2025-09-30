@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from datetime import datetime
+
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # allow cross-origin requests from frontend
 
-@app.route("/")
-def home():
-    return jsonify({"message": "Backend running!"})
+saved_assessments = []
 
 def get_dummy_score(product):
     product = product.lower()
@@ -34,11 +34,22 @@ def score():
             "score": score,
             "message": f"Environmental score for {product}"
         })
-
     return jsonify(response)
 
+@app.route("/api/save", methods=["POST"])
+def save_assessment():
+    data = request.get_json()
+    # Add a date field
+    saved_assessments.append({
+        "date": datetime.now().isoformat(),  # store current timestamp
+        "results": data
+    })
+    return jsonify({"message": "Assessment saved successfully", "saved": data})
+
+@app.route("/api/saved", methods=["GET"])
+def get_saved():
+    return jsonify(saved_assessments)
+
 if __name__ == "__main__":
+    from datetime import datetime
     app.run(debug=True, port=5000)
-
-
-

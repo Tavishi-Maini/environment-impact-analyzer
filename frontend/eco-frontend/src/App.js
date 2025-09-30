@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { TextField, Button, Card, CardContent, Typography, Box } from "@mui/material";
 
 function App() {
   const [products, setProducts] = useState(["", ""]);
   const [results, setResults] = useState([]);
+  const [saved, setSaved] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchSaved = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:5000/api/saved");
+        if (!res.ok) throw new Error("Failed to fetch saved assessments");
+        const data = await res.json();
+        setSaved(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSaved();
+  }, []);
 
   const handleChange = (index, value) => {
     const newProducts = [...products];
@@ -26,8 +43,18 @@ function App() {
       if (!res.ok) throw new Error("Server error");
       const data = await res.json();
       setResults(data);
+
+      await fetch("http://127.0.0.1:5000/api/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const savedRes = await fetch("http://127.0.0.1:5000/api/saved");
+      const savedData = await savedRes.json();
+      setSaved(savedData);
     } catch (err) {
-      setError("❌ Could not fetch scores. Please try again.");
+      setError("❌ Could not fetch scores or save assessment.");
     } finally {
       setLoading(false);
     }
@@ -40,36 +67,74 @@ function App() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Environmental Impact Analyzer 🌱</h1>
+    <div className="container">
+      <Typography variant="h4" gutterBottom>
+        Environmental Impact Analyzer 🌱
+      </Typography>
 
-      {products.map((product, i) => (
-        <input
-          key={i}
-          type="text"
-          placeholder={`Enter product ${i + 1}`}
-          value={product}
-          onChange={(e) => handleChange(i, e.target.value)}
-          style={{ padding: "10px", width: "200px", marginRight: "10px" }}
-        />
-      ))}
-      <button onClick={handleSubmit} style={{ padding: "10px 20px" }}>
-        Assess
-      </button>
-
-      {loading && <p>⏳ Analyzing...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div style={{ marginTop: "20px" }}>
-        {results.map((res, i) => (
-          <div key={i}>
-            <h3>{res.message}</h3>
-            <p style={{ fontWeight: "bold", color: getScoreColor(res.score) }}>
-              Score: {res.score}
-            </p>
-          </div>
+      <div className="input-container">
+        {products.map((product, i) => (
+          <TextField
+            key={i}
+            label={`Product ${i + 1}`}
+            variant="outlined"
+            value={product}
+            onChange={(e) => handleChange(i, e.target.value)}
+          />
         ))}
       </div>
+
+      <Button variant="contained" color="primary" onClick={handleSubmit}>
+        Assess
+      </Button>
+
+      {loading && <Typography sx={{ mt: 2 }}>⏳ Analyzing...</Typography>}
+      {error && <Typography sx={{ mt: 2, color: "red" }}>{error}</Typography>}
+
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 4, flexWrap: "wrap" }}>
+        {results.map((res, i) => (
+          <Card key={i} className="card">
+            <CardContent>
+              <Typography variant="h6">{res.product}</Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", color: getScoreColor(res.score) }}
+              >
+                Score: {res.score}
+              </Typography>
+              <Typography variant="body2">{res.message}</Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+
+      {saved.length > 0 && (
+        <div className="saved-section">
+          <Typography variant="h5" gutterBottom>
+            🗂 Saved Assessments
+          </Typography>
+          {saved.map((item, i) => (
+            <div key={i}>
+              <Typography variant="subtitle2">
+                {new Date(item.date).toLocaleString()}  {/* now will work */}
+              </Typography>
+              {item.results.map((res, j) => (
+                <Card key={j} className="card">
+                  <CardContent>
+                    <Typography variant="h6">{res.product}</Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{ fontWeight: "bold", color: getScoreColor(res.score) }}
+                    >
+                      Score: {res.score}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

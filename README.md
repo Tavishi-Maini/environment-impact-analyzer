@@ -57,6 +57,21 @@ Built with **Flask (backend)** + **React (frontend)**, and designed to evolve in
 
 ---
 
+### ✅ Week 1 · Day 6
+- **Backend:**  
+  - /api/score now accepts **multiple products** at once  
+  - Returns score + message for each product  
+
+- **Frontend:**  
+  - Added **two input fields** for product comparison  
+  - Results displayed **side by side**  
+  - Maintains **loading indicator** and **error handling**  
+
+- **UI/UX:**  
+  - Basic layout cleanup for readability  
+  - Color-coded scores (🟢 good / 🟠 moderate / 🔴 poor)  
+
+
 ## 👩‍💻 Author  
 Developed by *Tavishi Maini* as part of a full-stack + AI learning project.  
 
