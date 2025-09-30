@@ -57,7 +57,7 @@ Built with **Flask (backend)** + **React (frontend)**, and designed to evolve in
 
 ---
 
-### ✅ Week 1 · Day 6
+###  Week 1 · Day 6
 - **Backend:**  
   - /api/score now accepts **multiple products** at once  
   - Returns score + message for each product  
@@ -70,6 +70,26 @@ Built with **Flask (backend)** + **React (frontend)**, and designed to evolve in
 - **UI/UX:**  
   - Basic layout cleanup for readability  
   - Color-coded scores (🟢 good / 🟠 moderate / 🔴 poor)  
+
+---  
+
+### Week 1 · Day 7
+- **Goal:** Connect saved assessments with backend API and display them in the frontend.
+
+- **Backend:**
+ - /api/save stores product assessments along with a timestamp.
+ - /api/saved returns all saved assessments.
+ - CORS enabled to allow frontend requests.
+
+- **Frontend:**
+ - Users can assess multiple products.
+ - Proper date and time displayed for each saved assessment.
+ - Layout uses Material-UI components + custom CSS.
+
+- **Outcome:**
+ - Users can see current results and historical assessments.
+ - Backend integration prepares the app for future DB support.
+ - Professional, clean UI for resume-ready project.
 
 
 ## 👩‍💻 Author  
