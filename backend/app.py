@@ -2,34 +2,43 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # allow React frontend to connect
+CORS(app)
 
 @app.route("/")
 def home():
     return jsonify({"message": "Backend running!"})
 
+def get_dummy_score(product):
+    product = product.lower()
+    if "shirt" in product:
+        return 75
+    elif "phone" in product:
+        return 40
+    elif "plastic" in product:
+        return 30
+    return 55
 
 @app.route("/api/score", methods=["POST"])
-def get_score():
+def score():
     data = request.get_json()
-    product = data.get("product", "Unknown product")
+    products = data.get("products", [])
 
-    # Slightly expanded dummy scoring
-    if "shirt" in product.lower():
-        score = 75
-    elif "phone" in product.lower():
-        score = 40
-    elif "plastic" in product.lower():
-        score = 30
-    else:
-        score = 55
+    if not products:
+        return jsonify({"error": "No products provided"}), 400
 
-    return jsonify({
-        "product": product,
-        "score": score,
-        "message": f"Environmental score for {product}"
-    })
+    response = []
+    for product in products:
+        score = get_dummy_score(product)
+        response.append({
+            "product": product,
+            "score": score,
+            "message": f"Environmental score for {product}"
+        })
 
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+
+
+
