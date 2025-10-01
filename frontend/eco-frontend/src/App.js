@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { TextField, Button, Card, CardContent, Typography, Box } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import ProductInput from "./components/ProductInput";
+import Results from "./components/Results";
+import SavedAssessments from "./components/SavedAssessments";
 
 function App() {
   const [products, setProducts] = useState(["", ""]);
@@ -61,80 +66,36 @@ function App() {
   };
 
   const getScoreColor = (score) => {
-    if (score >= 70) return "green";
-    if (score >= 40) return "orange";
-    return "red";
-  };
+  if (score >= 70) return "var(--primary-green)";
+  if (score >= 40) return "var(--accent-orange)";
+  return "var(--accent-red)";
+};
+
 
   return (
-    <div className="container">
-      <Typography variant="h4" gutterBottom>
-        Environmental Impact Analyzer 🌱
-      </Typography>
+    <div>
+      <Header title="Environment Impact Analyzer 🌱"/>
+      <div className="container">
 
-      <div className="input-container">
-        {products.map((product, i) => (
-          <TextField
-            key={i}
-            label={`Product ${i + 1}`}
-            variant="outlined"
-            value={product}
-            onChange={(e) => handleChange(i, e.target.value)}
-          />
-        ))}
-      </div>
+        <ProductInput products={products} handleChange={handleChange} />
 
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Assess
-      </Button>
-
-      {loading && <Typography sx={{ mt: 2 }}>⏳ Analyzing...</Typography>}
-      {error && <Typography sx={{ mt: 2, color: "red" }}>{error}</Typography>}
-
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 4, flexWrap: "wrap" }}>
-        {results.map((res, i) => (
-          <Card key={i} className="card">
-            <CardContent>
-              <Typography variant="h6">{res.product}</Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", color: getScoreColor(res.score) }}
-              >
-                Score: {res.score}
-              </Typography>
-              <Typography variant="body2">{res.message}</Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
-
-      {saved.length > 0 && (
-        <div className="saved-section">
-          <Typography variant="h5" gutterBottom>
-            🗂 Saved Assessments
-          </Typography>
-          {saved.map((item, i) => (
-            <div key={i}>
-              <Typography variant="subtitle2">
-                {new Date(item.date).toLocaleString()}  {/* now will work */}
-              </Typography>
-              {item.results.map((res, j) => (
-                <Card key={j} className="card">
-                  <CardContent>
-                    <Typography variant="h6">{res.product}</Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{ fontWeight: "bold", color: getScoreColor(res.score) }}
-                    >
-                      Score: {res.score}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ))}
+        <div className="centerButton">
+        <Button variant="contained" color="primary" onClick={handleSubmit} >
+          Assess
+        </Button>
         </div>
-      )}
+
+        {loading && <Typography className="loading">⏳ Analyzing...</Typography>}
+        {error && <Typography className="error" sx={{ color: "var(--accent-red)" }}>{error}</Typography>}
+
+
+        <Results results={results} getScoreColor={getScoreColor} />
+
+        {saved.length > 0 && (
+          <SavedAssessments saved={saved} getScoreColor={getScoreColor} />
+        )}
+      </div>
+      <Footer/>
     </div>
   );
 }

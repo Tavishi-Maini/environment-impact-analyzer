@@ -1,0 +1,13 @@
+/* Footer.css */
+.footer {
+  background: var(--dark-text);
+  color: var(--neutral-gray);
+  text-align: center;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.footer p {
+  margin: 0;
+}
