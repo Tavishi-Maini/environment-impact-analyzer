@@ -1,6 +1,9 @@
-import { Card, CardContent, Typography } from "@mui/material";
+// src/components/SavedAssessments.js
+import React from "react";
+import Card from "./Card";
+import { Typography, Box } from "@mui/material";
 
-function SavedAssessments({ saved, getScoreColor }) {
+const SavedAssessments = ({ saved, getScoreColor }) => {
   return (
     <div className="saved-section">
       <Typography variant="h5" gutterBottom>
@@ -11,20 +14,20 @@ function SavedAssessments({ saved, getScoreColor }) {
           <Typography variant="subtitle2">
             {new Date(item.date).toLocaleString()}
           </Typography>
-          {item.results.map((res, j) => (
-            <Card key={j} className="card">
-              <CardContent>
-                <Typography variant="h6">{res.product}</Typography>
-                <Typography variant="body1" sx={{ fontWeight: "bold", color: getScoreColor(res.score) }}>
-                  Score: {res.score}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
+            {item.results.map((res, j) => (
+              <Card
+                key={j}
+                title={res.product}
+                score={res.score}
+                color={getScoreColor(res.score)}
+              />
+            ))}
+          </Box>
         </div>
       ))}
     </div>
   );
-}
+};
 
 export default SavedAssessments;
