@@ -1,0 +1,31 @@
+/* src/components/SavedAssessments.css */
+.saved-section {
+  margin-top: 3rem;
+}
+
+.saved-entry {
+  margin-bottom: 2rem;
+}
+
+.saved-date {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.saved-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.saved-card {
+  width: 200px;
+  transition: transform 0.3s ease;
+  border-top: 3px solid var(--accent-orange);
+}
+
+.saved-card:hover {
+  transform: translateY(-4px);
+}
